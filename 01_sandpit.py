@@ -28,36 +28,23 @@ def instructions():
     print()
 
 
-def choice_checker(question, valid_list, error):
+def check_rounds():
     while True:
+        response = input("how many rounds: ")
 
-        # Ask user for choice
-        response = input(question).lower()
-
-        for item in valid_list:
-            if response == item[0] or response == item:
-                return item
-
-        print(error)
-
-
-def check_questions():
-    while True:
-        response = input("how many questions: ")
-
-        question_error = "Please type either <enter> " \
-                         " or an integer that is more than 0\n"
+        round_error = "Please type either <enter> " \
+                      " or an integer that is more than 0\n"
         # If infinite
         if response != "":
             try:
                 response = int(response)
 
                 if response < 1:
-                    print(question_error)
+                    print(round_error)
                     continue
 
             except ValueError:
-                print(question_error)
+                print(round_error)
                 continue
 
         return response
@@ -97,76 +84,65 @@ def int_check(question, low=None, high=None):
             print("please enter an integer")
             continue
 
-
 # main routine goes here...
 show_instructions = yes_no("have you played this game"
                            " before? ")
-
-questions = check_questions()
+questions: int = 0
 questions_played = 0
 questions_won = 0
 questions_lost = 0
 
 # rounds loop
 end_game = "no"
-while end_game == "no":
 
-    print()
-    if questions == "":
-        heading = "Continuous mode: " \
-                  "Round {}".format(questions_played + 1)
-    else:
-        heading = "questions {} of " \
-                  "{}".format(questions_played + 1, questions)
+if questions == "":
+    heading = "infinite" \
+              'question {}'.format(questions_played + 1)
+else:
+    heading = "questions {} of " \
+              "{}".format(questions_played + 1, questions)
 
-    print(heading)
-    choose_instruction = "Please choose easy (e), medium " \
-                         "(m) or hard (h)" \
-                         "or 'xxx' to exit: "
-    choose_error = "Please choose from easy / " \
-                   "medium / hard (or xxx to quit)"
+    while True:
+        num_1 = random.randint(1, 20)
+        num_2 = random.randint(1, 20)
+        num_3 = random.randint(1, 20)
+        num_4 = random.randint(1, 20)
 
-    difficulty = ['easy', 'medium', 'hard', 'xxx']
+        easy = f"{num_1} + {num_2} - {num_3}"
+        medium = f"{num_1} * {num_2} + {num_3}"
+        hard = f"{num_1} *  {num_2} / {num_3} + {num_4}"
 
-    user_choice = choice_checker(choose_instruction, choose_error, difficulty)
-    if user_choice == "xxx":
+        answer_1 = num_1 + num_2 - num_3
+        answer_2 = num_1 * num_2 + num_3
+        answer_3 = num_1 * num_2 / num_3 + num_4
+
+        print("question:", easy, medium, hard)
+        print("answer:", answer_1, answer_2, answer_3)
+        mode_list = [easy, medium, hard, xxx]
+
+        print("please choose a mode between easy/medium/hard")
+        choose_instruction = "Please choose easy (e), medium " \
+                             "(m) or hard (h)" \
+                             "or 'xxx' to exit: "
+        choose_error = "Please choose from easy / " \
+                       "medium / hard (or xxx to quit)"
+
+        user_choice = [choose_instruction, choose_error, mode_list]
+        if user_choice = "xxx"
         break
-    mode = input("Choose a mode (easy, medium, hard): ").lower()
-
-    while mode not in difficulty:
-        print("Invalid mode! Please choose again.")
-        mode = input("Choose a mode (easy, medium, hard): ").lower()
-
-    print(f"You have selected {mode} mode.")
-
-    num1 = random.randint(1, 20)
-    num2 = random.randint(1, 20)
-    num3 = random.randint(1, 20)
-
-    if difficulty == "easy":
-        operator1 = random.choice(["+", "-"])
-    elif difficulty == "medium":
-        operator2 = random.choice(["+", "-", "*"])
-    elif difficulty == "hard":
-        operator2 = random.choice(["+", "-", "*", "/"])
-
-    question = f"{num1} {operator1} {num2} {operator2} {num3}"
-    answer = eval(question)
-
     print("Start Guessing!!")
     print()
-
     guess = int_check("Guess (or 'xxx' to exit): ")
     print("you guessed", guess)
 
-    # compare guess to secret number
-
-    if guess == answer:
-        questions_won += 1
+    if guess == "xxx":
+        end_game = "yes"
         break
 
-    if guess != answer:
-        questions_lost += 1
+    # compare guess to secret number
+
+    if guess == secret:
+        questions_won += 1
         break
 
     # check if we are out of rounds
@@ -174,6 +150,8 @@ while end_game == "no":
         break
 
 game_summary = []
+
+questions_played = 5
 
 questions_won = questions_played - questions_lost
 

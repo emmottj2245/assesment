@@ -131,42 +131,69 @@ while end_game == "no":
     user_choice = choice_checker(choose_instruction, choose_error, difficulty)
     if user_choice == "xxx":
         break
-    mode = input("Choose a mode (easy, medium, hard): ").lower()
 
-    while mode not in difficulty:
-        print("Invalid mode! Please choose again.")
-        mode = input("Choose a mode (easy, medium, hard): ").lower()
 
-    print(f"You have selected {mode} mode.")
+    def generate_easy_question():
+        num1 = random.randint(1, 20)
+        num2 = random.randint(1, 20)
+        operator = random.choice(['+', '-'])
+        equation = f"{num1} {operator} {num2}"
+        answer = eval(equation)
+        return equation, answer
 
-    num1 = random.randint(1, 20)
-    num2 = random.randint(1, 20)
-    num3 = random.randint(1, 20)
 
-    if difficulty == "easy":
-        operator1 = random.choice(["+", "-"])
-    elif difficulty == "medium":
-        operator2 = random.choice(["+", "-", "*"])
-    elif difficulty == "hard":
-        operator2 = random.choice(["+", "-", "*", "/"])
+    def generate_medium_question():
+        num1 = random.randint(1, 20)
+        num2 = random.randint(1, 20)
+        num3 = random.randint(1, 20)
+        operator1 = random.choice(['+', '-'])
+        operator2 = random.choice(['+', '-'])
+        equation = f"{num1} {operator1} {num2} {operator2} {num3}"
+        answer = eval(equation)
+        return equation, answer
 
-    question = f"{num1} {operator1} {num2} {operator2} {num3}"
-    answer = eval(question)
 
-    print("Start Guessing!!")
-    print()
+    def generate_hard_question():
+        num1 = random.randint(1, 20)
+        num2 = random.randint(1, 20)
+        num3 = random.randint(1, 20)
+        operator1 = random.choice(['+', '-', '*', '/'])
+        operator2 = random.choice(['+', '-', '*', '/'])
+        equation = f"{num1} {operator1} {num2} {operator2} {num3}"
+        answer = eval(equation)
+        return equation, answer
+
+
+    def main():
+        mode = input("Choose the mode (easy, medium, hard): ")
+        if mode == "easy":
+            equation, answer = generate_easy_question()
+        elif mode == "medium":
+            equation, answer = generate_medium_question()
+        elif mode == "hard":
+            equation, answer = generate_hard_question()
+        else:
+            print("Invalid mode selected!")
+            return
+
+        print("Math question:", equation)
+        user_answer = float(input("Enter your answer: "))
+
+        if user_answer == answer:
+            print("Correct answer!")
+        else:
+            print("Incorrect answer!")
+        if __name__ == "__main__":
+            main()
+
 
     guess = int_check("Guess (or 'xxx' to exit): ")
     print("you guessed", guess)
 
     # compare guess to secret number
 
-    if guess == answer:
+    if guess == secret:
         questions_won += 1
-        break
-
-    if guess != answer:
-        questions_lost += 1
         break
 
     # check if we are out of rounds
@@ -174,6 +201,8 @@ while end_game == "no":
         break
 
 game_summary = []
+
+questions_played = 5
 
 questions_won = questions_played - questions_lost
 

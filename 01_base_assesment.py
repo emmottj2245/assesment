@@ -1,5 +1,4 @@
 import random
-import math
 
 
 # Functions go here...
@@ -20,18 +19,35 @@ def yes_no(question):
 
 
 def instructions():
+    print()
     print("***** How To Play *****")
     print()
     print("it's a math game")
     print("You should try and improve your maths skills. ")
-    print()
     print("Have Fun :)")
     print()
 
 
-def level():
-    print("please choose a level from 1 - 4")
-    print("1 being the easiest and 4 being the hardest")
+def check_rounds():
+    while True:
+        response = input("how many rounds: ")
+
+        round_error = "Please type either <enter> " \
+                      " or an integer that is more than 0\n"
+        # If infinite
+        if response != "":
+            try:
+                response = int(response)
+
+                if response < 1:
+                    print(round_error)
+                    continue
+
+            except ValueError:
+                print(round_error)
+                continue
+
+        return response
 
 
 def int_check(question, low=None, high=None):
@@ -58,7 +74,7 @@ def int_check(question, low=None, high=None):
                 if response < low:
                     print("please enter a number that is more than (or equal to) {}".format(low))
 
-                continue
+                    continue
 
             return response
 
@@ -71,84 +87,65 @@ def int_check(question, low=None, high=None):
 
 # main routine goes here...
 show_instructions = yes_no("have you played this game"
-                           "before? ")
-
-rounds_played = 0
-rounds_won = 0
-low_number = int_check("Please choose a low number: ")
-high_number = int_check("Please choose a high number: ", low_number)
-
-var_range = high_number - low_number + 1
-max_raw = math.log2(var_range)
-max_upped = math.ceil(max_raw)
-max_guesses = max_upped + 1
-
-print("Max Guesses: {}".format(max_guesses))
-
-mode = "regular"
-
-rounds = int_check("How many rounds: ", 1, exit_code="")
-
-if rounds == "":
-    mode = "infinite"
-    rounds = 5
+                           " before? ")
+questions: int = 0
+questions_played = 0
+questions_won = 0
+questions_lost = 0
 
 # rounds loop
 end_game = "no"
-while rounds_played <= rounds:
+print('what mode would you like easy/medium/hard')
+print("you chose {mode}")
 
-    guesses_allowed = max_guesses
+if questions == "":
+    mode = "infinite"
 
-    while guesses_allowed <= max_guesses:
+    print("Start Guessing!!")
+    while True:
 
-        if mode == "infinite":
-            heading = f"Round {rounds_played + 1} (infinite mode)"
-            rounds += 1
-        else:
-            heading = f"Round {rounds_played + 1} of {rounds}"
+        guess = int_check("Guess (or 'xxx' to exit): ")
+        print("you guessed", guess)
 
-        print(heading)
+        if guess == "xxx":
+            end_game = "yes"
+            break
 
-        secret = random.randint(low_number, high_number)
+        # compare guess to secret number
 
-        rounds_played += 1
-
-        guesses_allowed = max_guesses
-
-        print("Start Guessing!!")
-        while True:
-
-            guess = int_check("Guess (or 'xxx' to exit): ",
-                              low_number, high_number, )
-            print("you guessed", guess)
-
-            if guess == "xxx":
-                end_game = "yes"
-                break
-
-            # compare guess to secret number
-
-            if guess == secret:
-                rounds_won += 1
-                break
+        if guess == secret:
+            questions_won += 1
+            break
 
         # check if we are out of rounds
-        if rounds_played >= rounds:
+        if questions_played >= questions:
             break
-        if guesses_allowed <= 0:
-            print("sorry you lose")
-            break
+
+num_1 = random.randint(1, 20)
+num_2 = random.randint(1, 20)
+num_3 = random.randint(1, 20)
+num_4 = random.randint(1, 20)
+
+easy = f"{num_1} + {num_2} - {num_3}"
+medium = f"{num_1} * {num_2} + {num_3}"
+hard = f"{num_1} *  {num_2} / {num_3} + {num_4}"
+
+answer_1 = num_1 + num_2 - num_3
+answer_2 = num_1 * num_2 + num_3
+answer_3 = num_1 * num_2 / num_3 + num_4
+
+print("question:", easy, medium, hard)
+print("answer:", answer_1, answer_2, answer_3)
 
 game_summary = []
 
-rounds_lost = 0
-rounds_played = 5
+questions_played = 5
 
-rounds_won = rounds_played - rounds_lost
+questions_won = questions_played - questions_lost
 
 # **** Calculate Game Stats
-percent_win = rounds_won / rounds_played * 100
-percent_lose = rounds_lost / rounds_played * 100
+percent_win = questions_won / questions_played * 100
+percent_lose = questions_lost / questions_played * 100
 
 print()
 print("***** Game History *****")
@@ -160,7 +157,7 @@ print()
 # displays game stats with : values to the nearest whole number
 print("******* Game Statistics *******")
 print("win: {}, ({:.0f}%)\nLoss: {}, "
-      "({:.0f}%)".format(rounds_won,
+      "({:.0f}%)".format(questions_won,
                          percent_win,
-                         rounds_lost,
+                         questions_lost,
                          percent_lose, ))
