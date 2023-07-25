@@ -3,6 +3,7 @@ import random
 
 # Functions go here...
 
+# Function to get a yes or no response from the user
 def yes_no(question):
     valid = False
     while not valid:
@@ -10,15 +11,14 @@ def yes_no(question):
 
         if response == "yes" or response == "y":
             return "yes"
-
         elif response == "no" or response == "n":
             instructions()
             return "no"
-
         else:
             print("Please answer yes / no")
 
 
+# Function to display game instructions
 def instructions():
     print()
     print("***** How To Play *****")
@@ -32,9 +32,9 @@ def instructions():
     print()
 
 
+# Function to validate user's choice
 def choice_checker(question, valid_list, error):
     while True:
-
         # Ask user for choice
         response = input(question).lower()
 
@@ -45,11 +45,13 @@ def choice_checker(question, valid_list, error):
         print(error)
 
 
+# Function to check the number of questions
 def check_questions():
     while True:
-        response = input("how many questions: ")
+        response = input("how many questions or press <enter> to play infinite mode")
 
         question_error = "Please type either <enter> or an integer that is more than 0\n"
+
         # If infinite
         if response == "":
             return ""
@@ -68,6 +70,7 @@ def check_questions():
         return response
 
 
+# Function to check if the input is an integer within specified bounds
 def int_check(question, low=None, high=None):
     situation = ""
 
@@ -77,17 +80,16 @@ def int_check(question, low=None, high=None):
         situation = "low only"
 
     while True:
-
         try:
             response = int(input(question))
 
-            # checks input is not too high or too low if both upper and lower bounds are specified
+            # Check input is not too high or too low if both upper and lower bounds are specified
             if situation == "both":
                 if response < low or response > high:
                     print("Please enter a number between {} and {}".format(low, high))
                     continue
 
-            # check input is not too low
+            # Check input is not too low
             elif situation == "low only":
                 if response < low:
                     print("Please enter a number that is equal to or greater than {}".format(low))
@@ -95,14 +97,12 @@ def int_check(question, low=None, high=None):
 
             return response
 
-        # check input is an integer
-
         except ValueError:
             print("Please enter an integer")
             continue
 
 
-# main routine goes here...
+# Main routine goes here...
 show_instructions = yes_no("Have you played this game before? ")
 
 questions = check_questions()
@@ -110,10 +110,9 @@ questions_played = 0
 questions_correct = 0
 questions_incorrect = 0
 
-# rounds loop
+# Rounds loop
 end_game = "no"
 while end_game == "no":
-
     print()
     if questions == "":
         heading = "Continuous mode: " \
@@ -155,7 +154,6 @@ while end_game == "no":
     answer = eval(question)
 
     print("Question:", question)
-
     print("Start Answering!!")
     print()
 
@@ -164,7 +162,7 @@ while end_game == "no":
     if answer != guess:
         print("Answer: ", answer)
 
-    # compare guess to answer
+    # Compare guess to answer
     if guess == answer:
         print("Correct!")
         questions_correct += 1
@@ -174,18 +172,13 @@ while end_game == "no":
 
     questions_played += 1
 
-    # check if we are out of rounds
+    # Check if we are out of rounds
     if questions_played == questions:
         break
 
-game_summary = []
+Quiz_summary = []
 
-end_game = input("Do you want to end the game? (yes/no): ").lower()
-while end_game not in ["yes", "no"]:
-    print("Invalid input! Please answer 'yes' or 'no'.")
-    end_game = input("Do you want to end the game? (yes/no): ").lower()
-
-# **** Calculate Game Stats ****
+# Calculate Game Stats
 questions_correct = questions_played - questions_incorrect
 
 # Calculate percentages
@@ -197,13 +190,9 @@ else:
     percent_incorrect = 0
 
 print()
-print("***** Game History *****")
-for game in game_summary:
-    print(game)
-
-print()
 
 # Display game stats with values rounded to the nearest whole number
 print("******* Game Statistics *******")
-print("Win: {}, ({:.0f}%)\nLoss: {}, ({:.0f}%)".format(questions_correct, percent_correct, questions_incorrect,
-                                                       percent_incorrect))
+print(
+    "Correct: {}, ({:.0f}%)\n Incorrect: {}, ({:.0f}%)".format(questions_correct, percent_correct, questions_incorrect,
+                                                               percent_incorrect))
