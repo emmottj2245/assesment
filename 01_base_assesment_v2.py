@@ -114,14 +114,16 @@ questions_incorrect = 0
 end_game = "no"
 while end_game == "no":
     print()
+    # This code sees if the user has left it blank and press enter than the code will head into continuous mode
+    # Otherwise it will get the users input and show them that they are (round number) of (how many rounds they wanted to play)
     if questions == "":
         heading = "Continuous mode: " \
                   "Round {}".format(questions_played + 1)
     else:
         heading = "Questions {} of " \
                   "{}".format(questions_played + 1, questions)
-
-    print(heading)
+        print(heading)
+    # User choose their difficulty for their question
     choose_instruction = "Please choose easy (e), medium " \
                          "(m), or hard (h), " \
                          "or 'xxx' to exit: "
@@ -130,13 +132,13 @@ while end_game == "no":
 
     choose_error = "Please choose from easy / " \
                    "medium / hard (or xxx to quit)"
-
+    # User can quit at this point but at no point when answering the question
     user_level = choice_checker(choose_instruction, difficulty, choose_error)
     if user_level == "xxx":
         break
-
+    # tells user what mod they have selected
     print(f"You have selected {user_level} mode.")
-
+    # Generate the question going off what the user's input was when choosing the difficulty
     num1 = random.randint(1, 20)
     num2 = random.randint(1, 20)
     num3 = random.randint(1, 20)
@@ -149,20 +151,20 @@ while end_game == "no":
     elif user_level == "hard":
         operator1 = random.choice(["+", "-"])
         operator2 = random.choice(["*"])
-
+    # The question base and the solver
     question = f"{num1} {operator1} {num2} {operator2} {num3}"
     answer = eval(question)
-
+    # prints the question
     print("Question:", question)
     print("Start Answering!!")
     print()
-
+    # Prints the answer after the user has inputted an answer
     guess = int_check("Type in the answer!")
     print("You answered:", guess)
     if answer != guess:
         print("Answer: ", answer)
 
-    # Compare guess to answer
+    # Compare guess to answer if answer is correct "Correct" if answer is wrong "Incorrect"
     if guess == answer:
         print("Correct!")
         questions_correct += 1
